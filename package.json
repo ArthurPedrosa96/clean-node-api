@@ -12,11 +12,6 @@
       "git add"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npx lint-staged"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ArthurPedrosa96/clean-node-api.git"
