@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "lint-staged": {
+    "*.js": ["standard"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ArthurPedrosa96/clean-node-api.git"
@@ -18,6 +21,7 @@
   },
   "homepage": "https://github.com/ArthurPedrosa96/clean-node-api#readme",
   "devDependencies": {
+    "lint-staged": "^12.1.2",
     "standard": "^16.0.4"
   }
 }
