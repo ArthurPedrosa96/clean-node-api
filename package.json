@@ -8,7 +8,8 @@
   },
   "lint-staged": {
     "*.js": [
-      "standard --fix", "git add"
+      "standard --fix",
+      "git add"
     ]
   },
   "husky": {
@@ -29,6 +30,7 @@
   "homepage": "https://github.com/ArthurPedrosa96/clean-node-api#readme",
   "devDependencies": {
     "husky": "^7.0.4",
+    "jest": "^27.4.5",
     "lint-staged": "^12.1.2",
     "standard": "^16.0.4"
   }
