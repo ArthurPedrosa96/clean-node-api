@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --watch",
     "test:staged": "jest --passWithNoTests",
-    "test:ci" : "jest --coverage"
+    "test:ci": "jest --coverage"
   },
   "standard": {
     "env": [
@@ -38,6 +38,7 @@
     "standard": "^16.0.4"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "validator": "^13.7.0"
   }
 }
