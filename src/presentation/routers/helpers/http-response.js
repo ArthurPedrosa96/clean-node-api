@@ -1,6 +1,7 @@
-// const MissingParamError = require('../errors/missing-param')
-const UnauthorizedError = require('../errors/unathorized')
-const ServerError = require('../errors/server')
+const {
+  UnauthorizedError
+  , ServerError
+} = require('../errors/index')
 module.exports = class HttpResponse {
   static badRequest (error) {
     return {
