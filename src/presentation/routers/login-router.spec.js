@@ -2,6 +2,7 @@ const LoginRouter = require('./login-router')
 const MissingParamError = require('./errors/missing-param')
 const UnauthorizedError = require('./errors/unathorized')
 const ServerError = require('./errors/server')
+const InvalidParamError = require('./errors/invalid-param')
 
 const makeSut = () => {
   const authUseCaseSpy = makeAuthUseCase()
@@ -165,5 +166,19 @@ describe('Login Router', () => {
     const httpResponse = await sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('should return 400 an invalid email is provided ', async () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'invalid_emailmail.com',
+        password: 'any_password'
+      }
+    }
+
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
 })
