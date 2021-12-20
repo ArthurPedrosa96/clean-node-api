@@ -33,6 +33,12 @@ module.exports = class AuthUseCase {
     if (!this.tokenGenerator.createToken) {
       throw new InvalidParamError('no createToken method in tokenGenerator class')
     }
+    if (!this.updateAccessTokenRepository) {
+      throw new MissingParamError('UpdateAccessTokenRepository')
+    }
+    if (!this.updateAccessTokenRepository.update) {
+      throw new InvalidParamError('no update method in UpdateAccessTokenRepository class')
+    }
 
     const user = await this.loadUserByEmailRepository.load(email)
     const isValidPassword = user && await this.encrypter.compare(password, user.password)
