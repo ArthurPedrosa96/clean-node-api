@@ -8,11 +8,21 @@ class LoadUserByEmailRepositorySpy {
   }
 }
 
+class EncrypterSpy {
+  async compare (password, hashedPassword) {
+    this.password = password
+    this.hashedPassword = hashedPassword
+  }
+}
+
 const makeSut = () => {
   const loadUserByEmailRepositorySpy = new LoadUserByEmailRepositorySpy()
-  loadUserByEmailRepositorySpy.user = {}
-  const sut = new AuthUseCase(loadUserByEmailRepositorySpy)
-  return { sut, loadUserByEmailRepositorySpy }
+  loadUserByEmailRepositorySpy.user = {
+    password: 'hashed_password'
+  }
+  const encrypterSpy = new EncrypterSpy()
+  const sut = new AuthUseCase(loadUserByEmailRepositorySpy, encrypterSpy)
+  return { sut, loadUserByEmailRepositorySpy, encrypterSpy }
 }
 describe('Auth UseCase', () => {
   test('should Throw error if no email is provided', async () => {
@@ -58,5 +68,12 @@ describe('Auth UseCase', () => {
     const { sut } = makeSut()
     const accessToken = await sut.auth('valid_email@mail.com', 'invalid_password')
     expect(accessToken).toBeNull()
+  })
+
+  test('should call Encrypter with correct values', async () => {
+    const { sut, loadUserByEmailRepositorySpy, encrypterSpy } = makeSut()
+    await sut.auth('valid_email@mail.com', 'any_password')
+    expect(encrypterSpy.password).toBe('any_password')
+    expect(encrypterSpy.hashedPassword).toBe(loadUserByEmailRepositorySpy.user.password)
   })
 })
