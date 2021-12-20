@@ -18,8 +18,10 @@ class AuthUseCase {
     if (!this.loadUserByEmailRepository.load) {
       throw new InvalidParamError('no load method')
     }
-    const accessToken = await this.loadUserByEmailRepository.load(email)
-    return accessToken
+    const user = await this.loadUserByEmailRepository.load(email)
+    if (!user) {
+      return null
+    }
   }
 }
 
