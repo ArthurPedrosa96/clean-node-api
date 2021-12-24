@@ -1,24 +1,30 @@
 const { MongoClient } = require('mongodb')
+const { MissingParamError } = require('../../utils/erros/index')
+
+let connection
+let db
+
 class LoadUserByEmailRepository {
   constructor (userModel) {
     this.userModel = userModel
   }
 
   async load (email) {
+    if (!this.userModel) {
+      throw new MissingParamError('repository user model')
+    }
     const user = await this.userModel.findOne({ email })
     return user
   }
 }
 
-const makeSut = (userModel) => {
+const makeSut = () => {
+  const userModel = db.collection('users')
   const sut = new LoadUserByEmailRepository(userModel)
-  return sut
+  return { sut, userModel }
 }
 
 describe('LoadUserByEmail Repository', () => {
-  let connection
-  let db
-
   beforeAll(async () => {
     connection = await MongoClient.connect(global.__MONGO_URI__, {
       useNewUrlParser: true,
@@ -36,19 +42,23 @@ describe('LoadUserByEmail Repository', () => {
   })
 
   test('should return null if no user is found', async () => {
-    const userModel = db.collection('users')
-    const sut = makeSut(userModel)
+    const { sut } = makeSut()
     const user = await sut.load('invalid_email@mail.com')
     expect(user).toBeNull()
   })
 
   test('should return a user if user is found', async () => {
-    const userModel = db.collection('users')
+    const { sut, userModel } = makeSut()
     await userModel.insertOne({
       email: 'valid_email@mail.com'
     })
-    const sut = makeSut(userModel)
     const user = await sut.load('valid_email@mail.com')
     expect(user.email).toBe('valid_email@mail.com')
   })
+
+//   test('should throw an error if no userModel dependency is provided to LoadUserByEmail Repository', async () => {
+//     const sut = new LoadUserByEmailRepository()
+//     const promise = sut.load('valid_email@mail.com')
+//     expect(promise).rejects.toThrow(new MissingParamError('repository user model'))
+//   })
 })
