@@ -13,7 +13,8 @@ class LoadUserByEmailRepository {
     if (!this.userModel) {
       throw new MissingParamError('repository user model')
     }
-    const user = await this.userModel.findOne({ email })
+    const user = await this.userModel.findOne({ email },
+      { projection: { password: 1 } })
     return user
   }
 }
@@ -49,11 +50,19 @@ describe('LoadUserByEmail Repository', () => {
 
   test('should return a user if user is found', async () => {
     const { sut, userModel } = makeSut()
-    await userModel.insertOne({
-      email: 'valid_email@mail.com'
-    })
+    const fakeUser = {
+      email: 'valid_email@mail.com',
+      name: 'any_name',
+      age: 50,
+      state: 'any_state',
+      password: 'hashed_password'
+    }
+    const fakeUserInsertion = await userModel.insertOne(fakeUser)
     const user = await sut.load('valid_email@mail.com')
-    expect(user.email).toBe('valid_email@mail.com')
+    expect(user).toEqual({
+      _id: fakeUserInsertion.insertedId,
+      password: fakeUser.password
+    })
   })
 
 //   test('should throw an error if no userModel dependency is provided to LoadUserByEmail Repository', async () => {
