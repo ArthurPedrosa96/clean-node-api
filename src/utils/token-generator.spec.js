@@ -24,4 +24,10 @@ describe('Token Generator', () => {
     const token = await sut.generate('any_id')
     expect(token).toBe(jwt.token)
   })
+
+  test('should call JWT with correct id', async () => {
+    const sut = makeSut()
+    await sut.generate('any_id')
+    expect(jwt.id).toBe('any_id')
+  })
 })
