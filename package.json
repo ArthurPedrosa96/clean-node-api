@@ -5,7 +5,9 @@
   "main": "src/main/index.js",
   "scripts": {
     "start": "node src/main",
-    "test": "jest --watch",
+    "test": "jest --watch --passWithNoTests",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js",
+    "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "jest --passWithNoTests",
     "test:ci": "jest --coverage"
   },
@@ -37,7 +39,8 @@
     "husky": "^7.0.4",
     "jest": "^27.4.5",
     "lint-staged": "^12.1.2",
-    "standard": "^16.0.4"
+    "standard": "^16.0.4",
+    "supertest": "^6.1.6"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
