@@ -21,7 +21,7 @@ describe('LoadUserByEmail Repository', () => {
   })
 
   afterAll(async () => {
-    console.log(await db.command({ ping: 1 }))
+    await db.command({ ping: 1 })
     await MongoHelper.disconnet()
   })
 
